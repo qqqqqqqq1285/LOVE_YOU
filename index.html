@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Наш Мир | Наша История</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Общие стили */
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-text-size-adjust: 100%;
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 100%;
+            padding: 20px;
+        }
+        
+        /* Шапка */
+        .header {
+            text-align: center;
+            padding: 20px 0 40px;
+            position: relative;
+        }
+        
+        .big-heart {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        
+        .big-heart i {
+            font-size: 100px;
+            color: #ff4d6d;
+            text-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+        }
+        
+        /* Карточки */
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .section-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 24px;
+            color: #ff4d6d;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Галерея */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .photo-item {
+            aspect-ratio: 1;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .photo-placeholder {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 3px dashed #ff4d6d;
+            padding: 20px;
+        }
+        
+        .photo-placeholder:hover {
+            transform: scale(1.05);
+            border-color: #ff758c;
+        }
+        
+        .photo-placeholder i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+        
+        .photo-placeholder span {
+            font-size: 14px;
+            text-align: center;
+        }
+        
+        /* Кнопка удаления фото */
+        .delete-photo {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 77, 109, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 2;
+        }
+        
+        .photo-item:hover .delete-photo {
+            display: flex;
+        }
+        
+        /* Моменты */
+        .moments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .moment-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 4px solid #ff4d6d;
+            position: relative;
+        }
+        
+        .moment-date {
+            color: #ff4d6d;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .moment-text {
+            color: #555;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        .delete-moment {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #ff4d6d;
+            cursor: pointer;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .moment-item:hover .delete-moment {
+            display: block;
+        }
+        
+        /* Добавление контента */
+        .add-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .add-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            resize: vertical;
+            min-height: 60px;
+            background: #fff;
+            color: #333;
+        }
+        
+        .add-input:focus {
+            outline: none;
+            border-color: #ff4d6d;
+        }
+        
+        .add-button {
+            background: linear-gradient(135deg, #ff4d6d 0%, #ff758c 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .add-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3);
+        }
+        
+        /* Цитата дня */
+        .quote {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 16px;
+            margin: 30px 0;
+            font-size: 18px;
+            line-height: 1.6;
+            position: relative;
+        }
+        
+        .quote:before, .quote:after {
+            content: '"';
+            color: #ff4d6d;
+            font-size: 32px;
+            font-family: Georgia, serif;
+        }
+        
+        /* Логоут */
+        .logout-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #ff4d6d;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            transform: scale(1.1);
+            background: white;
+        }
+        
+        /* Скрытый input для загрузки фото */
+        #photo-upload {
+            display: none;
+        }
+        
+        /* Анимации */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            5% { transform: scale(1.1); }
+            10% { transform: scale(1); }
+            15% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section {
+            animation: fadeIn 0.6s ease;
+        }
+        
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            z-index: 1001;
+            display: none;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .counter {
+            display: inline-block;
+            background: #ff4d6d;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        
+        /* Темная тема */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+                color: #fff;
+            }
+            
+            .section {
+                background: rgba(30, 30, 46, 0.95);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .moment-item {
+                background: rgba(255, 255, 255, 0.05);
+            }
+            
+            .add-input {
+                background: rgba(255, 255, 255, 0.05);
+                border-color: rgba(255, 255, 255, 0.1);
+                color: #fff;
+            }
+            
+            .photo-placeholder {
+                background: rgba(255, 255, 255, 0.05);
+                color: #aaa;
+                border-color: #ff4d6d;
+            }
+            
+            .quote {
+                background: rgba(255, 255, 255, 0.05);
+                color: #aaa;
+            }
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .section {
+                padding: 20px;
+                border-radius: 20px;
+            }
+            
+            .big-heart i {
+                font-size: 80px;
+            }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 12px;
+            }
+            
+            .section-title {
+                font-size: 22px;
+            }
+            
+            .photo-placeholder span {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка -->
+        <div class="header">
+            <div class="big-heart">
+                <i class="fas fa-heart"></i>
+            </div>
+        </div>
+        
+        <!-- Цитата дня -->
+        <div class="quote" id="quote">
+            "Самое прекрасное в жизни — это моменты, которые мы создаём вместе"
+        </div>
+        
+        <!-- Галерея -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-images"></i>
+                Наши фотографии
+                <span class="counter" id="photo-count">0</span>
+            </h2>
+            <div class="gallery" id="gallery">
+                <!-- Плейсхолдер для загрузки -->
+                <div class="photo-placeholder" onclick="document.getElementById('photo-upload').click()">
+                    <i class="fas fa-plus"></i>
+                    <span>Добавить фото</span>
+                </div>
+                <!-- Фотографии будут загружаться сюда -->
+            </div>
+            <input type="file" id="photo-upload" accept="image/*" multiple>
+        </div>
+        
+        <!-- Наши моменты -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-heart"></i>
+                Запомнившиеся моменты
+                <span class="counter" id="moment-count">3</span>
+            </h2>
+            <div class="moments-list" id="moments-list">
+                <!-- Моменты будут загружаться сюда -->
+            </div>
+        </div>
+        
+        <!-- Добавить момент -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-edit"></i>
+                Добавить новый момент
+            </h2>
+            <div class="add-form">
+                <input type="text" id="moment-title" class="add-input" placeholder="Название момента">
+                <textarea id="moment-text" class="add-input" placeholder="Опиши этот прекрасный момент..."></textarea>
+                <button class="add-button" onclick="addMoment()">
+                    <i class="fas fa-plus"></i>
+                    Сохранить момент
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Кнопка выхода -->
+    <button class="logout-btn" onclick="logout()" title="Выйти">
+        <i class="fas fa-sign-out-alt"></i>
+    </button>
+    
+    <!-- Уведомление -->
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text">Успешно добавлено!</span>
+    </div>
+
+    <script>
+      // URL сервера
+const SERVER_URL = 'http://localhost:3000';
+
+// Проверка авторизации
+if (!localStorage.getItem('loggedIn')) {
+  window.location.href = 'login.html';
+}
+
+// Глобальные переменные
+let photos = [];
+let moments = [];
+
+// Начальные моменты
+const initialMoments = [
+  {
+    id: '1',
+    title: "День встречи",
+    text: "Я даже представить себе не мог, что по дороге на учебу встречу тебя, зайка.",
+    date: new Date().toISOString()
+  },
+  {
+    id: '2',
+    title: "Первый раз пошли вместе гулять",
+    text: "Это было в тот же день, когда мы познакомились, мне невероятно понравилось, я тогда целый вечер таскал с собой пятилитровку ахахаха",
+    date: new Date().toISOString()
+  },
+  {
+    id: '3',
+    title: "Как мы ходили в кино",
+    text: "В этот день пошел первый снег, и я предложил тебе встречаться...",
+    date: new Date().toISOString()
+  }
+];
+
+// Функция для выхода
+function logout() {
+  localStorage.removeItem('loggedIn');
+  window.location.href = 'login.html';
+}
+
+// Загрузка данных с сервера
+async function loadData() {
+  try {
+    // Загружаем фото
+    const photosResponse = await fetch(`${SERVER_URL}/api/photos`);
+    const photosData = await photosResponse.json();
+    photos = photosData.photos || [];
+    
+    // Загружаем моменты
+    const momentsResponse = await fetch(`${SERVER_URL}/api/moments`);
+    const momentsData = await momentsResponse.json();
+    moments = momentsData.moments || [];
+    
+    // Если моментов нет, добавляем начальные
+    if (moments.length === 0) {
+      for (const moment of initialMoments) {
+        await addMomentToServer(moment.title, moment.text);
+      }
+      // Перезагружаем моменты
+      const newResponse = await fetch(`${SERVER_URL}/api/moments`);
+      const newData = await newResponse.json();
+      moments = newData.moments;
+    }
+    
+    // Обновляем интерфейс
+    loadPhotos();
+    loadMoments();
+    updateCounters();
+    setRandomQuote();
+    
+  } catch (error) {
+    console.error('Ошибка загрузки данных:', error);
+    showNotification('Ошибка соединения с сервером', 'error');
+    
+    // Показываем оффлайн-режим
+    loadOfflineData();
+  }
+}
+
+// Загрузка оффлайн данных
+function loadOfflineData() {
+  const offlinePhotos = JSON.parse(localStorage.getItem('offlinePhotos')) || [];
+  const offlineMoments = JSON.parse(localStorage.getItem('offlineMoments')) || initialMoments;
+  
+  photos = offlinePhotos;
+  moments = offlineMoments;
+  
+  loadPhotos();
+  loadMoments();
+  updateCounters();
+  setRandomQuote();
+  
+  showNotification('Режим оффлайн. Данные сохранены локально', 'warning');
+}
+
+// Инициализация при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+  loadData();
+  
+  // Настраиваем загрузку фотографий
+  document.getElementById('photo-upload').addEventListener('change', function(event) {
+    uploadPhotos(event);
+  });
+});
+
+// Загрузка фотографий в интерфейс
+function loadPhotos() {
+  const gallery = document.getElementById('gallery');
+  
+  gallery.innerHTML = `
+    <div class="photo-placeholder" onclick="document.getElementById('photo-upload').click()">
+      <i class="fas fa-plus"></i>
+      <span>Добавить фото</span>
+    </div>
+  `;
+  
+  photos.forEach((photo) => {
+    const photoItem = document.createElement('div');
+    photoItem.className = 'photo-item';
+    photoItem.innerHTML = `
+      <img src="${photo.data}" alt="Наше фото">
+      <button class="delete-photo" onclick="deletePhoto('${photo.id}')" title="Удалить">
+        <i class="fas fa-times"></i>
+      </button>
+    `;
+    gallery.appendChild(photoItem);
+  });
+}
+
+// Загрузка моментов в интерфейс
+function loadMoments() {
+  const momentsList = document.getElementById('moments-list');
+  momentsList.innerHTML = '';
+  
+  moments.forEach((moment) => {
+    const momentItem = document.createElement('div');
+    momentItem.className = 'moment-item';
+    momentItem.innerHTML = `
+      <div class="moment-date">
+        <i class="far fa-calendar"></i>
+        ${moment.title}
+      </div>
+      <p class="moment-text">${moment.text}</p>
+      <button class="delete-moment" onclick="deleteMoment('${moment.id}')" title="Удалить">
+        <i class="fas fa-trash-alt"></i>
+      </button>
+    `;
+    momentsList.appendChild(momentItem);
+  });
+}
+
+// Обновление счетчиков
+function updateCounters() {
+  document.getElementById('photo-count').textContent = photos.length;
+  document.getElementById('moment-count').textContent = moments.length;
+}
+
+// Загрузка фото на сервер
+async function uploadPhotos(event) {
+  const files = event.target.files;
+  
+  if (files.length === 0) return;
+  
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    
+    if (!file.type.match('image.*')) {
+      showNotification('Можно загружать только изображения!', 'error');
+      continue;
+    }
+    
+    if (file.size > 5 * 1024 * 1024) {
+      showNotification(`Файл слишком большой (макс 5MB)!`, 'error');
+      continue;
+    }
+    
+    const reader = new FileReader();
+    
+    reader.onload = async function(e) {
+      try {
+        // Отправляем на сервер
+        const response = await fetch(`${SERVER_URL}/api/photos`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ photoData: e.target.result })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          photos.unshift(result.photo);
+          saveOfflineData();
+          loadPhotos();
+          updateCounters();
+          showNotification('Фотография добавлена!');
+        }
+      } catch (error) {
+        // Сохраняем локально
+        const offlinePhoto = {
+          id: Date.now().toString(),
+          data: e.target.result,
+          date: new Date().toISOString()
+        };
+        
+        photos.unshift(offlinePhoto);
+        saveOfflineData();
+        
+        loadPhotos();
+        updateCounters();
+        showNotification('Фото сохранено локально (оффлайн)');
+      }
+    };
+    
+    reader.readAsDataURL(file);
+  }
+  
+  event.target.value = '';
+}
+
+// Добавление момента
+async function addMoment() {
+  const title = document.getElementById('moment-title').value.trim();
+  const text = document.getElementById('moment-text').value.trim();
+  
+  if (!title || !text) {
+    showNotification('Заполни все поля!', 'error');
+    return;
+  }
+  
+  try {
+    const newMoment = await addMomentToServer(title, text);
+    moments.unshift(newMoment);
+    saveOfflineData();
+    
+    document.getElementById('moment-title').value = '';
+    document.getElementById('moment-text').value = '';
+    
+    loadMoments();
+    updateCounters();
+    showNotification('Момент сохранён!');
+    
+  } catch (error) {
+    // Сохраняем локально
+    const offlineMoment = {
+      id: Date.now().toString(),
+      title,
+      text,
+      date: new Date().toISOString()
+    };
+    
+    moments.unshift(offlineMoment);
+    saveOfflineData();
+    
+    document.getElementById('moment-title').value = '';
+    document.getElementById('moment-text').value = '';
+    
+    loadMoments();
+    updateCounters();
+    showNotification('Момент сохранён локально (оффлайн)');
+  }
+}
+
+// Вспомогательная функция
+async function addMomentToServer(title, text) {
+  const response = await fetch(`${SERVER_URL}/api/moments`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ title, text })
+  });
+  
+  const result = await response.json();
+  
+  if (!result.success) {
+    throw new Error('Ошибка сервера');
+  }
+  
+  return result.moment;
+}
+
+// Удаление фото
+async function deletePhoto(id) {
+  if (!confirm('Удалить эту фотографию?')) return;
+  
+  try {
+    await fetch(`${SERVER_URL}/api/photos/${id}`, { method: 'DELETE' });
+    photos = photos.filter(photo => photo.id !== id);
+    saveOfflineData();
+    loadPhotos();
+    updateCounters();
+    showNotification('Фотография удалена');
+  } catch (error) {
+    photos = photos.filter(photo => photo.id !== id);
+    saveOfflineData();
+    loadPhotos();
+    updateCounters();
+    showNotification('Фото удалено локально');
+  }
+}
+
+// Удаление момента
+async function deleteMoment(id) {
+  if (!confirm('Удалить этот момент?')) return;
+  
+  try {
+    await fetch(`${SERVER_URL}/api/moments/${id}`, { method: 'DELETE' });
+    moments = moments.filter(moment => moment.id !== id);
+    saveOfflineData();
+    loadMoments();
+    updateCounters();
+    showNotification('Момент удалён');
+  } catch (error) {
+    moments = moments.filter(moment => moment.id !== id);
+    saveOfflineData();
+    loadMoments();
+    updateCounters();
+    showNotification('Момент удалён локально');
+  }
+}
+
+// Сохранение локально
+function saveOfflineData() {
+  localStorage.setItem('offlinePhotos', JSON.stringify(photos));
+  localStorage.setItem('offlineMoments', JSON.stringify(moments));
+}
+
+// Уведомления
+function showNotification(text, type = 'success') {
+  const notification = document.getElementById('notification');
+  const notificationText = document.getElementById('notification-text');
+  
+  notificationText.textContent = text;
+  notification.style.display = 'block';
+  
+  if (type === 'error') {
+    notification.style.background = '#ff4444';
+  } else if (type === 'warning') {
+    notification.style.background = '#ff9800';
+  } else {
+    notification.style.background = '#4CAF50';
+  }
+  
+  setTimeout(() => {
+    notification.style.display = 'none';
+  }, 3000);
+}
+
+// Случайные цитаты
+function setRandomQuote() {
+  const quotes = [
+    "Любовь — это когда всё остальное перестаёт иметь значение",
+    "Счастье — это... ты",
+    "Лучшие моменты жизни — те, что мы делим вместе",
+    "Ты — мое самое большое счастье",
+    "Вместе мы можем всё",
+    "Каждый день с тобой — это подарок",
+    "Наша любовь — самая красивая история",
+    "Ты делаешь мой мир лучше",
+    "С тобой я дома, где бы мы ни были",
+    "Ты — причина моей улыбки"
+  ];
+  
+  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+  document.getElementById('quote').textContent = `"${randomQuote}"`;
+}
+    </script>
+</body>
+</html>

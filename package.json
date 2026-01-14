@@ -1,0 +1,13 @@
+{
+  "name": "our-world-server",
+  "version": "1.0.0",
+  "description": "Сервер для сайта 'Наш Мир'",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security"
+  }
+}
